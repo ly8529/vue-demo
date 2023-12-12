@@ -39,3 +39,44 @@ pnpm create vite vue-ts-init --template vue-ts
   pnpm run dev
 
 ```
+
+# 工程化插件
+
+## 增加.nvmrc 用来设置 node 版本 不用再执行 nvm use 切换 node 版本
+
+## 设置路径别名
+
+```
+pnpm i @types/node -D
+```
+
+1、tsconfig.json 设置
+
+```
+"baseUrl": "",
+"paths": {
+    "@": ["./src"] // 此处映射是相对于"baseUrl"
+}
+```
+
+2、vite.config.ts 设置路径
+
+```
+import { resolve } from "path";
+
+resolve: {
+    alias: [
+        {
+            find: "@",
+            replacement: resolve(__dirname, "src"),
+        },
+    ],
+},
+
+```
+
+3、找个模块测试一下
+
+```
+import HelloWorld from "@/components/HelloWorld.vue";
+```

@@ -291,3 +291,28 @@ if (import.meta.hot) {
 pnpm install sass -D
 
 ```
+
+## 使用 autoprefiexer 给 web 项目自动增加 css 前缀，兼容各种浏览器
+安装
+```
+pnpm install autoprefixer -D
+```
+在vite.config.ts 中配置
+
+、、、
+import autoprefixer from 'autoprefixer'
+ 
+// https://vitejs.dev/config/
+export default defineConfig({
+  css: {
+    postcss: {
+      plugins: [
+        autoprefixer({
+          overrideBrowserslist: ['Chrome > 40', 'ff > 31', 'ie 11'],
+        })
+      ]
+    }
+  },
+  plugins: [vue()],
+})
+、、、

@@ -80,3 +80,15 @@ resolve: {
 ```
 import HelloWorld from "@/components/HelloWorld.vue";
 ```
+
+## 找不到模块“./App.vue”或其相应的类型声明
+
+在 vite-env.d.ts 文件里新增以下对 vue 的声明
+
+```
+declare module "*.vue" {
+	import type { DefineComponent } from "vue";
+	const component: DefineComponent<{}, {}, any>;
+	export default component;
+}
+```

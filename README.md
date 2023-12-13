@@ -285,3 +285,9 @@ if (import.meta.hot) {
 }
 
 ```
+
+## 使用sass
+```
+pnpm install sass -D
+
+```

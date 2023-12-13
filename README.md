@@ -1,21 +1,5 @@
-# Vue 3 + TypeScript + Vite
+# 基于vite新建一个vue—ts 项目
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
-
-## Recommended IDE Setup
-
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Type Support For `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
-
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
 
 # github 上新建一个项目 vue-ts-init
 
@@ -34,9 +18,9 @@ pnpm create vite vue-ts-init --template vue-ts
 可以运行起来看看
 
 ```
- cd vue-init-ts-2
-  pnpm install
-  pnpm run dev
+cd vue-init-ts-2
+pnpm install
+pnpm run dev
 
 ```
 
@@ -55,7 +39,7 @@ pnpm i @types/node -D
 ```
 "baseUrl": "",
 "paths": {
-    "@": ["./src"] // 此处映射是相对于"baseUrl"
+    "@/*": ["./src/*"] // 此处映射是相对于"baseUrl"
 }
 ```
 
@@ -102,26 +86,26 @@ pnpm i @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint eslint-
 
 ![安装 prettier + eslint](https://img-blog.csdnimg.cn/direct/ca998e17f52c4a2eade41758d8ec595c.png)
 
-1、配置 .eslintrc.js
+### 配置 .eslintrc.js
 ```
 module.exports = {
-	"root": true,
-	"parser": "vue-eslint-parser",
-	"parserOptions": {
-		"parser": "@typescript-eslint/parser"
-	},
-	"extends": ["plugin:vue/vue3-recommended", "plugin:prettier/recommended"],
-	"rules": {
-		"vue/no-v-html": 0,
-		"vue/v-on-event-hyphenation": 0,
-		"vue/no-template-shadow": 0,
-		"vue/multi-word-component-names": 0 
-	}
+    root: true,
+    parser: 'vue-eslint-parser',
+    parserOptions: {
+        parser: '@typescript-eslint/parser',
+    },
+    extends: ['plugin:vue/vue3-recommended', 'plugin:prettier/recommended'],
+    rules: {
+        'vue/no-v-html': 0,
+        'vue/v-on-event-hyphenation': 0,
+        'vue/no-template-shadow': 0,
+        'vue/multi-word-component-names': 0,
+    },
 }
 
 ```
 
-2、配置 .eslintignore
+### 配置 .eslintignore
 ```
 /dist
 /node_modules
@@ -138,28 +122,24 @@ index.html
 *.md
 ```
 
-3、配置.prettierrc.js
+### 配置.prettierrc.js
 ```
- module.exports = {
-   
-	"singleQuote": true, // 使用单引号代替双引号 
-	"printWidth": 200, //超过最大值换行
-	"semi": false, // 结尾不用分号
-	"useTabs": true, // 缩进使用tab, 不使用空格
-	"tabWidth": 4, // tab 样式宽度
-	"bracketSpacing": true, // 对象数组, 文字间加空格 {a: 1} => { a: 1 }
-	"arrowParens": "avoid", // 如果可以, 自动去除括号 (x) => x 变为 x => x
-	"proseWrap": "preserve",
-	"htmlWhitespaceSensitivity": "ignore",
-	"trailingComma": "all" 
+module.exports = {
+    singleQuote: true, // 使用单引号代替双引号
+    printWidth: 200, // 超过最大值换行
+    semi: false, // 结尾不用分号
+    useTabs: true, // 缩进使用tab, 不使用空格
+    tabWidth: 4, // tab 样式宽度
+    bracketSpacing: true, // 对象数组, 文字间加空格 {a: 1} => { a: 1 }
+    arrowParens: 'avoid', // 如果可以, 自动去除括号 (x) => x 变为 x => x
+    proseWrap: 'preserve',
+    htmlWhitespaceSensitivity: 'ignore',
+    trailingComma: 'all',
 }
 
 ```
-补充：配置.prettierrc.json时因为添加注释编器提示错误 “Comments are not permitted in JSON”
-参考：[​解决Comments are not permitted in JSON​](https://juejin.cn/post/7124661302521233415)
 
-
-4、配置.prettierignore
+### 配置.prettierignore
 ```
 /dist
 /node_modules
@@ -179,10 +159,89 @@ index.html
 *.md
 ```
 
-5、重启编辑器，格式化文件
+### 重启编辑器，格式化文件
 
 ```
 pnpm eslint --fix ./src/*
 ```
 
-6、在 package.json 中去掉 "type": "module", 因为 .eslintrc.js中 “module.exports=”导出方式不是module默认的export default
+### 在 package.json 中去掉 "type": "module", 因为 .eslintrc.js中 “module.exports=”导出方式不是module默认的export default
+
+## 使用 vue-router 
+### 1、安装
+```
+pnpm i vue-router
+```
+### 2、配置路由
+
+#### 在src目录下新建 router/index.ts
+```
+import {createRouter, createWebHistory} from 'vue-router'
+
+const routes = [
+    { path: '/', component: ()=> import('@/components/HelloWorld.vue') },
+    { path: '/login', component: ()=> import('@/pages/login.vue') },
+    { path: '/account', component: ()=> import('@/pages/account.vue') },
+    { path: '/:pathMatch(.*)', redirect: '/'  },
+]
+
+const router = createRouter({
+    history: createWebHistory(),
+    routes,
+})
+
+//导航守卫
+router.beforeEach((_to, _from, next)=>{
+    next()
+})
+export default router
+
+```
+#### 在main.ts 引入路由并使用
+```
+import router from "@/router"
+app.use(router)
+```
+#### 在页面中使用
+
+##### 在app.vue页面中加入
+```
+<router-view></router-view>
+```
+
+##### 新增pages/account.vue
+```
+<template>
+	<h1>account 页面</h1>
+	<button @click="toLogin">toLogin</button>
+</template>
+<script lang="ts" setup>
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+function toLogin() {
+	router.push({
+		path: '/login',
+	})
+}
+</script>
+
+```
+##### 新增pages/login.vue
+```
+<template>
+	<h1>login 页面</h1>
+	<button @click="toAccount">toAccount</button>
+</template>
+<script lang="ts" setup>
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+function toAccount() {
+	router.push({
+		path: '/account',
+	})
+}
+</script>
+
+```

@@ -22,7 +22,7 @@
 
 		"baseUrl": "",
 		"paths": {
-			"@": ["./src"] // 此处映射是相对于"baseUrl"
+			"@/*": ["./src/*"] // 此处映射是相对于"baseUrl"
 		}
 	},
 	"include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"],

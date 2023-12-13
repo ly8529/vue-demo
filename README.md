@@ -244,3 +244,44 @@ function toAccount() {
 </script>
 
 ```
+
+## 使用状态管理器 pinia
+
+### 安装 
+```
+pnpm i pinia
+```
+
+### main.ts 中使用
+```
+import { createPinia } from 'pinia'
+
+app.use(createPinia())
+```
+
+### 新建stores/index.ts
+
+```
+import { defineStore, acceptHMRUpdate } from 'pinia'
+
+export const useStore = defineStore('counter', {
+	state: () => {
+		return { count: 0 }
+	},
+	// 也可以这样定义
+	// state: () => ({ count: 0 })
+	getters: {
+		double: state => state.count * 2,
+	},
+	actions: {
+		increment() {
+			this.count++
+		},
+	},
+})
+
+if (import.meta.hot) {
+	import.meta.hot.accept(acceptHMRUpdate(useStore, import.meta.hot))
+}
+
+```

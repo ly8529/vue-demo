@@ -34,7 +34,7 @@ pnpm run dev
 pnpm i @types/node -D
 ```
 
-1、tsconfig.json 设置
+### 1、tsconfig.json 设置
 
 ```
 "baseUrl": "",
@@ -43,7 +43,7 @@ pnpm i @types/node -D
 }
 ```
 
-2、vite.config.ts 设置路径
+### 2、vite.config.ts 设置路径
 
 ```
 import { resolve } from "path";
@@ -59,7 +59,7 @@ resolve: {
 
 ```
 
-3、找个模块测试一下
+### 3、找个模块测试一下
 
 ```
 import HelloWorld from "@/components/HelloWorld.vue";
@@ -86,7 +86,7 @@ pnpm i @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint eslint-
 
 ![安装 prettier + eslint](https://img-blog.csdnimg.cn/direct/ca998e17f52c4a2eade41758d8ec595c.png)
 
-### 配置 .eslintrc.js
+### 1、配置 .eslintrc.js
 ```
 module.exports = {
     root: true,
@@ -105,7 +105,7 @@ module.exports = {
 
 ```
 
-### 配置 .eslintignore
+### 2、配置 .eslintignore
 ```
 /dist
 /node_modules
@@ -122,7 +122,7 @@ index.html
 *.md
 ```
 
-### 配置.prettierrc.js
+### 3、配置.prettierrc.js
 ```
 module.exports = {
     singleQuote: true, // 使用单引号代替双引号
@@ -139,7 +139,7 @@ module.exports = {
 
 ```
 
-### 配置.prettierignore
+### 4、配置.prettierignore
 ```
 /dist
 /node_modules
@@ -159,13 +159,13 @@ index.html
 *.md
 ```
 
-### 重启编辑器，格式化文件
+### 5、重启编辑器，格式化文件
 
 ```
 pnpm eslint --fix ./src/*
 ```
 
-### 在 package.json 中去掉 "type": "module", 因为 .eslintrc.js中 “module.exports=”导出方式不是module默认的export default
+### 6、在 package.json 中去掉 "type": "module", 因为 .eslintrc.js中 “module.exports=”导出方式不是module默认的export default
 
 ## 使用 vue-router 
 ### 1、安装
@@ -174,7 +174,7 @@ pnpm i vue-router
 ```
 ### 2、配置路由
 
-#### 在src目录下新建 router/index.ts
+#### 1、在src目录下新建 router/index.ts
 ```
 import {createRouter, createWebHistory} from 'vue-router'
 
@@ -197,19 +197,18 @@ router.beforeEach((_to, _from, next)=>{
 export default router
 
 ```
-#### 在main.ts 引入路由并使用
+#### 2、在main.ts 引入路由并使用
 ```
 import router from "@/router"
 app.use(router)
 ```
-#### 在页面中使用
 
-##### 在app.vue页面中加入
+##### 3、在app.vue页面中加入
 ```
 <router-view></router-view>
 ```
 
-##### 新增pages/account.vue
+##### 4、新增pages/account.vue
 ```
 <template>
 	<h1>account 页面</h1>
@@ -227,7 +226,7 @@ function toLogin() {
 </script>
 
 ```
-##### 新增pages/login.vue
+##### 5、新增pages/login.vue
 ```
 <template>
 	<h1>login 页面</h1>

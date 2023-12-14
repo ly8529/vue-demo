@@ -1,5 +1,5 @@
 <template>
-	<h1>hello 小可爱！</h1>
+	<h1 class="filter-1">hello 小可爱！</h1>
 	<router-link type="button" to="/login">去登录页面</router-link>
 	<br />
 	<router-link to="/account">去用户页面</router-link>
@@ -19,4 +19,8 @@ function addBtn() {
 	//counter.increment()
 }
 </script>
-@/store/index
+<style lang="scss" scoped>
+.filter-1 {
+	filter: blur(1px);
+}
+</style>

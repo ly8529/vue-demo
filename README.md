@@ -296,6 +296,7 @@ pnpm install sass -D
 安装
 ```
 pnpm install autoprefixer -D
+pnpm install postcss -D
 ```
 在vite.config.ts 中配置
 
@@ -316,3 +317,16 @@ export default defineConfig({
   plugins: [vue()],
 })
 、、、
+
+在页面中测试一下
+```
+.filter-1 {
+	filter: blur(1px);
+}
+
+运行结果：
+.filter-1[data-v-e17ea971] {
+    -webkit-filter: blur(1px);
+    filter: blur(1px);
+}
+```

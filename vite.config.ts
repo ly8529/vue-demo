@@ -32,7 +32,7 @@ export default defineConfig({
 		}),
 	],
 	// 引入第三方的配置,强制预构建插件包
-	optimizeDeps: {
-		include: [''],
-	},
+	// optimizeDeps: {
+	// 	include: [''],
+	// },
 })

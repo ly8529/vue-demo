@@ -4,10 +4,11 @@
 	<br />
 	<router-link to="/account">去用户页面</router-link>
 	<div>Current Count: {{ counter.count }}</div>
-	<button @click="addBtn">add count</button>
+	<a-button type="primary" @click="addBtn">Primary Button</a-button>
 </template>
 <script lang="ts" setup>
 import { useStore } from '@/stores/index'
+import { Button as AButton } from 'ant-design-vue'
 const counter = useStore()
 
 function addBtn() {

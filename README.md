@@ -348,3 +348,18 @@ plugins: [
     }),
 ],
 ```
+
+## 使用组件库 ant-design-vue
+
+安装
+```
+pnpm i ant-design-vue
+
+```
+使用
+```
+import { Button as AButton } from 'ant-design-vue'
+
+<a-button type="primary">Primary Button</a-button>
+
+```

@@ -5,6 +5,7 @@
 	<router-link to="/account">去用户页面</router-link>
 	<div>Current Count: {{ counter.count }}</div>
 	<a-button type="primary" @click="addBtn">Primary Button</a-button>
+	<h1 class="text-3xl font-bold underline">Hello world!</h1>
 </template>
 <script lang="ts" setup>
 import { useStore } from '@/stores/index'

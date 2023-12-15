@@ -363,3 +363,29 @@ import { Button as AButton } from 'ant-design-vue'
 <a-button type="primary">Primary Button</a-button>
 
 ```
+## 使用 tailwindcss 快速添加样式
+
+安装
+```
+pnpm install -D tailwindcss postcss autoprefixer
+pnpx tailwindcss init
+```
+在根目录得到一个 tailwind.config.js配置文件
+
+配置
+```
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: ["./src/**/*.{vue}"],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+```
+在common.scss添加以下代码
+```
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```

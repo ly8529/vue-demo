@@ -5,7 +5,8 @@
 	"scripts": {
 		"dev": "vite",
 		"build": "vue-tsc && vite build",
-		"preview": "vite preview"
+		"preview": "vite preview",
+		"prepare": "husky install"
 	},
 	"dependencies": {
 		"ant-design-vue": "^4.0.7",
@@ -24,6 +25,8 @@
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-prettier": "^5.0.1",
 		"eslint-plugin-vue": "^9.19.2",
+		"husky": "^8.0.3",
+		"lint-staged": "^15.2.0",
 		"postcss": "^8.4.32",
 		"prettier": "^3.1.1",
 		"sass": "^1.69.5",
@@ -35,5 +38,11 @@
 	},
 	"browserslist": [
 		"cover 99.5%"
-	]
+	],
+	"lint-staged": {
+		"*": "prettier --write",
+		"*.vue": "eslint --cache --fix",
+		"*.ts": "eslint --cache --fix",
+		"*.md": "prettier --list-different"
+	}
 }

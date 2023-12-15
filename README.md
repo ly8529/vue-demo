@@ -389,3 +389,4 @@ module.exports = {
 @tailwind components;
 @tailwind utilities;
 ```
+

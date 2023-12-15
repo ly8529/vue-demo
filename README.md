@@ -330,3 +330,21 @@ export default defineConfig({
     filter: blur(1px);
 }
 ```
+
+## 使用 @vitejs/plugin-legacy 兼容旧版浏览器js
+
+安装
+```
+pnpm i @vitejs/plugin-legacy terser@^5.4.0 -D
+```
+
+在vite.config.js中新增以下配置
+```
+import legacy from '@vitejs/plugin-legacy'
+
+plugins: [
+    legacy({
+        targets: ['cover 99.5%'],
+    }),
+],
+```

@@ -40,7 +40,6 @@
 		"cover 99.5%"
 	],
 	"lint-staged": {
-		"*": "prettier --write",
 		"*.vue": "eslint --cache --fix",
 		"*.ts": "eslint --cache --fix",
 		"*.md": "prettier --list-different"

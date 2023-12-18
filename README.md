@@ -390,3 +390,29 @@ module.exports = {
 @tailwind utilities;
 ```
 
+## 使用husky和lint-staged进行代码提交前的检查
+安装
+```
+pnpm dlx husky-init && pnpm install
+
+pnpm install --save-dev lint-staged
+
+```
+
+在.husky/per-commit 中添加
+```
+npx lint-staged
+
+```
+在package.json
+```
+"lint-staged": {
+    "*.{vue,ts}": "eslint --cache --fix",
+    "*.md": "prettier --list-different"
+}
+```
+执行命令观察结果
+```
+git add . 
+git commot -m 'husky'
+```

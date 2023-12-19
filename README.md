@@ -416,3 +416,166 @@ npx lint-staged
 git add . 
 git commot -m 'husky'
 ```
+
+## 基于axios封装请求
+
+### 安装
+```
+pnpm i axios
+```
+
+### 创建实例
+```
+import axios, { AxiosError, AxiosInstance } from 'axios'
+
+function createRequestInstance(url: string): AxiosInstance {
+	const instance = axios.create({
+		timeout: 1000 * 60 * 10,
+		withCredentials: true,
+		baseURL: `${url}/`,
+	})
+	return instance
+}
+//创建一个axios实例
+const request = createRequestInstance('http://10.10.24.58:3000')
+
+export default request
+```
+
+### 新增错误class
+新建error.ts
+```
+import { AxiosError } from 'axios'
+
+//自定义错误返回类型(具体可以跟后端同学商量决定)
+export type ErrorResponse = {
+	status: number
+	code: number
+	msg: string
+}
+
+class AxRequestError extends Error {
+	data: ErrorResponse | undefined
+
+	raw: AxiosError
+
+	isUnAuthorized = false
+
+	isServerError = false
+
+	errCode?: number
+
+	isNetError = false
+
+	message: string
+
+	constructor(status: number, message: string, raw: AxiosError, data?: ErrorResponse) {
+		super(message) // ES6 要求，子类的构造函数必须执行一次 super 函数，否则会报错。
+		this.data = data
+		this.raw = raw
+		this.isUnAuthorized = status === 401 //一般是身份验证不通过，token过期
+		this.isServerError = status >= 500
+		this.errCode = data?.code
+		this.message = `${message || raw?.message || data?.msg || ''}`
+		if (message.includes('getaddrinfo ENOTFOUND') || message === 'Network Error') {
+			this.message = 'network error'
+			this.isNetError = true
+		} else if (['no token present in request'].includes(message)) {
+			this.message = 'login expired'
+		}
+	}
+}
+
+export default AxRequestError
+
+```
+新增错误处理器 handleError.ts
+
+```
+import { AxiosError } from 'axios'
+import AxRequestError, { ErrorResponse } from './error'
+
+export function handelError(error: AxiosError | AxRequestError): AxRequestError {
+	const err = error instanceof AxRequestError ? error : new AxRequestError(error.response?.status || 1, error.message, error, error.response?.data as ErrorResponse)
+	return err
+}
+
+```
+
+### 请求拦截器
+
+在instance.ts 实例文件中新增请求拦截器，添加用户身份验证、多语言、自定义headers等设置
+
+```
+//伪方法 具体根据业务逻辑实现
+const getToken = () => {
+	return ''
+}
+//请求拦截器
+request.interceptors.request.use(config => {
+	const token = getToken() 
+	const headers = config.headers || {}
+	config.headers = {
+		...headers,
+		Authorization: `${headers.Authorization || token || ''}`,
+		language: 'zh', //适用于多语言环境,
+	} 
+	return config
+})
+```
+
+### 响应拦截器
+
+```
+//响应拦截器
+request.interceptors.response.use(undefined, (err: AxRequestError) => {
+	err = handelError(err)
+	if (err.isUnAuthorized) {
+		//todo退出登录
+	}
+	//其他错误处理
+
+	return Promise.reject(err)
+})
+
+```
+### 公共请求方法
+
+```
+import { AxiosResponse, AxiosRequestConfig } from 'axios'
+import request from './instance'
+
+/* 导出封装的请求方法以及公共方法 */
+const $api = {
+	get<T = any, R = AxiosResponse<T>>(url: string, config?: AxiosRequestConfig): Promise<R> {
+		return request.get(url, config)
+	},
+	post<T = any, R = AxiosResponse<T>>(url: string, data?: object, config?: AxiosRequestConfig): Promise<R> {
+		return request.post(url, data, config)
+	},
+	put<T = any, R = AxiosResponse<T>>(url: string, data?: object, config?: AxiosRequestConfig): Promise<R> {
+		return request.put(url, data, config)
+	},
+	delete<T = any, R = AxiosResponse<T>>(url: string, config?: AxiosRequestConfig): Promise<R> {
+		return request.delete(url, config)
+	},
+	patch<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R> {
+		return request.patch(url, data, config)
+	},
+
+	async test(): Promise<string> {
+		const res = await request.get('/test')
+		return res.data.result || ''
+	},
+}
+
+export default $api
+
+```
+
+### 在main.ts绑定公共请求方法
+```
+import $api from '@/service/requestList'
+
+app.config.globalProperties.$api = $api
+```

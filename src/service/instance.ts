@@ -1,18 +1,19 @@
-import axios, { AxiosInstance, AxiosRequestHeaders, AxiosRequestConfig } from 'axios'
+import axios, { AxiosInstance } from 'axios'
 import { useRouter } from 'vue-router'
 import { handelError } from './handleError'
 import AxRequestError from './error'
+import { getProcessEnv } from '@/global/env'
 
 function createRequestInstance(url: string): AxiosInstance {
 	const instance = axios.create({
 		timeout: 1000 * 60 * 10,
-		withCredentials: true,
+		withCredentials: false,
 		baseURL: `${url}/`,
 	})
 	return instance
 }
 //创建一个axios实例
-const request = createRequestInstance('http://10.10.24.58:3000')
+const request = createRequestInstance(getProcessEnv('APP_API_BASE') || '')
 
 //伪方法 具体根据业务逻辑实现
 const getToken = () => {

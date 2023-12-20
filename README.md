@@ -431,7 +431,7 @@ import axios, { AxiosError, AxiosInstance } from 'axios'
 function createRequestInstance(url: string): AxiosInstance {
 	const instance = axios.create({
 		timeout: 1000 * 60 * 10,
-		withCredentials: true,
+		withCredentials: false,
 		baseURL: `${url}/`,
 	})
 	return instance
@@ -563,9 +563,9 @@ const $api = {
 		return request.patch(url, data, config)
 	},
 
-	async test(): Promise<string> {
+	async test(): Promise<AxiosResponse> {
 		const res = await request.get('/test')
-		return res.data.result || ''
+		return res
 	},
 }
 
@@ -578,4 +578,64 @@ export default $api
 import $api from '@/service/requestList'
 
 app.config.globalProperties.$api = $api
+```
+
+### 配置生产环境和开发环境
+
+新增env.ts
+```
+import { isUndef } from '@/utils/is'
+
+// 正式环境
+export const ENV = {
+	APP_API_BASE: 'http://10.10.24.58:3000',
+	IS_DEV: '',
+	NODE_ENV: 'production',
+	IS_TEST: '',
+}
+
+// 测试环境
+export const ENV_DEV = {
+	...ENV,
+	APP_API_BASE: 'http://10.10.24.58:3001',
+	IS_DEV: 'true',
+	NODE_ENV: 'development',
+	IS_TEST: 'true',
+}
+
+export type EnvKey = keyof typeof ENV
+
+const isTestEnv = process.env.NODE_ENV === 'development' || ['test.xxx.com'].includes(location.host)
+
+// const isTestEnv = false
+export function getProcessEnv(key: EnvKey): string | void {
+	if (isTestEnv) {
+		if (!isUndef(ENV_DEV[key])) {
+			return ENV_DEV[key]
+		}
+		return ''
+	}
+	if (!isUndef(ENV[key])) {
+		return ENV[key]
+	}
+}
+
+```
+在instance.ts中引入
+```
+import { getProcessEnv } from '@/global/env'
+const request = createRequestInstance(getProcessEnv('APP_API_BASE') || '')
+
+```
+
+### 测试一下
+```
+import $api from '@/service/request'
+
+$api.get('/test').then(res => {
+	console.info('res:', res)
+})
+$api.test().then(res => {
+	console.info('res:', res)
+})
 ```

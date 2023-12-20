@@ -10,9 +10,12 @@
 <script lang="ts" setup>
 import { useStore } from '@/stores/index'
 import { Button as AButton } from 'ant-design-vue'
-import api from '@/service/index'
+import $api from '@/service/request'
 
-api.post('http://10.10.24.58:3000/demo', { command: 1 }).then(res => {
+$api.get('/test').then(res => {
+	console.info('res:', res)
+})
+$api.test().then(res => {
 	console.info('res:', res)
 })
 const counter = useStore()

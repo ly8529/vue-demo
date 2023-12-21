@@ -6,6 +6,8 @@
 	<div>Current Count: {{ counter.count }}</div>
 	<a-button type="primary" @click="addBtn">Primary Button</a-button>
 	<h1 class="text-3xl font-bold underline">Hello world!</h1>
+	<SvgIcon name="vue" color="pink" size="100"></SvgIcon>
+	<SvgIcon name="bold" color="blue" size="100"></SvgIcon>
 </template>
 <script lang="ts" setup>
 import { useStore } from '@/stores/index'

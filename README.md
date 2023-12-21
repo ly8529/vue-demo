@@ -639,3 +639,105 @@ $api.test().then(res => {
 	console.info('res:', res)
 })
 ```
+
+## 使用vite-plugin-svg-icons插件展示svg矢量图
+
+
+### 安装 
+```
+pnpm install vite-plugin-svg-icons -D
+
+```
+
+### 在vite.config.ts 中配置
+
+```
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+ plugins: [
+	createSvgIconsPlugin({
+			// Specify the icon folder to be cached
+			iconDirs: [resolve(__dirname, 'src/assets/icons')],
+		}),
+    ],
+```
+
+### 在main.ts 中引用
+```
+import 'virtual:svg-icons-register'
+```
+### 新建svgIcon公共组件
+```
+<template>
+	<svg aria-hidden="true" :width="width" :height="height">
+		<use :href="symbolId" :fill="color" />
+	</svg>
+</template>
+
+<script setup lang="ts">
+import { computed } from 'vue'
+
+const props = defineProps({
+	name: {
+		type: String,
+		required: true,
+	},
+	color: {
+		type: String,
+		default: '#333',
+	},
+	size: {
+		type: String,
+		default: '',
+	},
+})
+const symbolId = computed(() => `#icon-${props.name}`)
+
+const size = props.size.split(' ')
+
+let width: string
+let height: string
+if (size.length === 1) {
+	;[width] = size
+	height = width
+} else if (size.length === 2) {
+	;[width, height] = size
+} else {
+	throw new Error(`invalid size for svg: ${props.name}`)
+}
+</script>
+
+```
+### 新建global/allGlobalComponents.ts 注册全局组件
+
+```
+// 引入项目中的全部全局组件
+import SvgIcon from '@/components/svgIcon.vue'
+
+// 组装成一个对象
+const allGlobalComponents: any = { SvgIcon }
+
+// 对外暴露插件对象，在main.ts中引入后，直接自动调用install方法 注册插件
+export default {
+	install(app: any) {
+		// 循环注册所有的全局组件
+		Object.keys(allGlobalComponents).forEach(componentName => {
+			app.component(componentName, allGlobalComponents[componentName])
+		})
+	},
+}
+
+```
+
+### 在main.ts 中使用
+```
+import allGlobalComponents from '@/global/allGlobalComponents'
+
+app.use(allGlobalComponents)
+
+```
+
+### 测试一下 在icons中新增一个bold.svg
+
+```
+<SvgIcon name="bold" color="blue" size="100"></SvgIcon>
+```

@@ -5,6 +5,8 @@ import { resolve } from 'path'
 import autoprefixer from 'autoprefixer'
 //js兼容旧版浏览器
 import legacy from '@vitejs/plugin-legacy'
+//svg插件
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -27,6 +29,10 @@ export default defineConfig({
 	},
 	plugins: [
 		vue(),
+		createSvgIconsPlugin({
+			// Specify the icon folder to be cached
+			iconDirs: [resolve(__dirname, 'src/assets/icons')],
+		}),
 		legacy({
 			targets: ['cover 99.5%'],
 		}),

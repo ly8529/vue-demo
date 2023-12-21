@@ -4,6 +4,8 @@
 	<br />
 	<router-link to="/account">去用户页面</router-link>
 	<div>Current Count: {{ store.count }}</div>
+	<button @click="addBtn">addBtn</button>
+
 	<a-button type="primary" @click="addBtn">add count</a-button>
 	<br />
 	<a-button type="primary" @click="changeLang">changeLang</a-button>

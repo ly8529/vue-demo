@@ -363,6 +363,25 @@ import { Button as AButton } from 'ant-design-vue'
 <a-button type="primary">Primary Button</a-button>
 
 ```
+
+备注：这里安装的版本是 ant-design-vue 4.0.7
+然后按钮点击的时候报错：
+```
+useConfigInject.js:64 Uncaught TypeError: Cannot read properties of undefined (reading 'value')
+    at ReactiveEffect.fn (useConfigInject.js:64:83)
+    at ReactiveEffect.run (reactivity.esm-bundler.js:178:19)
+    at get value [as value] (reactivity.esm-bundler.js:1140:33)
+    at showWave (useWave.js:7:21)
+    at HTMLButtonElement.onClick (index.js:51:13)
+```
+升级一下就可以了 这个问题ant-design-vue已经修复了
+```
+pnpm i ant-design-vue@next
+```
+然后安装的这个版本啊 是"ant-design-vue": "4.0.0-rc.6"
+
+在软件开发中，版本号通常由三个部分组成：主版本号、次版本号和修订版本号。有时，还会包括预发布版本号或构建元数据。在你提到的版本号 "4.0.0-rc.6" 中，"rc.6" 表示预发布版本，其中 "rc" 代表 "Release Candidate"，意味着这是一个发布候选版本。数字 "6" 表示该候选版本的第六个构建或修订。
+
 ## 使用 tailwindcss 快速添加样式
 
 安装

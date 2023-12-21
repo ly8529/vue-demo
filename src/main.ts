@@ -10,11 +10,16 @@ import $api from '@/service/requestList'
 import 'virtual:svg-icons-register'
 import allGlobalComponents from '@/global/allGlobalComponents'
 
+import i18n, { $i18n } from '@/global/i18n'
+
 const app = createApp(App)
 
-app.config.globalProperties.$api = $api
-
-app.use(router)
+app.use(i18n)
 app.use(createPinia())
 app.use(allGlobalComponents)
+
+app.config.globalProperties.$api = $api
+app.config.globalProperties.$t = $i18n
+
+app.use(router)
 app.mount('#app')

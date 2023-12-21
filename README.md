@@ -741,3 +741,87 @@ app.use(allGlobalComponents)
 ```
 <SvgIcon name="bold" color="blue" size="100"></SvgIcon>
 ```
+# i18n添加多语言
+
+## 安装
+```
+pnpm i vue-i18n@9
+```
+
+新建global/i18n
+
+en.ts
+```
+export default {
+	test: 'Hello',
+}
+```
+zh.ts
+```
+export default {
+	test: '你好',
+}
+```
+
+index.ts
+```
+import { createI18n } from 'vue-i18n'
+import en from './en'
+import zh from './zh'
+import { SystemLang } from '@/global/enum'
+
+const localLang = localStorage.SYSTEM_LANG
+
+let curSystemLang
+if (localLang) {
+	curSystemLang = ['zh', 'zh-cn'].includes(localLang) ? SystemLang.ZH : SystemLang.EN
+}
+
+const defaultLang = curSystemLang ? curSystemLang : ['zh', 'zh-cn'].includes(window.navigator.language.toLocaleLowerCase()) ? SystemLang.ZH : SystemLang.EN
+
+const messages = {
+	en,
+	zh,
+}
+
+const i18n = createI18n({
+	messages,
+	locale: defaultLang,
+	//fallbackLocale: 'en', // 设置回退语言环境
+})
+
+export function setCurSystemLang(curSystemLang: SystemLang) {
+	i18n.global.locale = curSystemLang
+}
+
+export const curLang = i18n.global.locale
+
+export const $i18n = i18n.global.t.bind(i18n.global)
+
+export default i18n
+
+```
+
+在main.ts中引入并使用
+```
+import i18n, { $i18n } from '@/global/i18n'
+
+app.use(i18n)
+
+app.config.globalProperties.$t = $i18n
+```
+
+在页面中使用
+```
+<h1 class="text-3xl font-bold underline">{{ i18n.global.locale }}: {{ $t('test') }} </h1>
+<h1 class="text-3xl font-bold underline">{{ test }}</h1>
+
+import i18n, { $i18n, setCurSystemLang } from '@/global/i18n'
+import { SystemLang } from '@/global/enum'
+
+const test = computed(() => $i18n('test'))
+
+function changeLang() {
+	setCurSystemLang(SystemLang.EN)
+}
+```

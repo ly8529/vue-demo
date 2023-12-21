@@ -167,7 +167,7 @@ pnpm eslint --fix ./src/*
 
 ### 6、在 package.json 中去掉 "type": "module", 因为 .eslintrc.js中 “module.exports=”导出方式不是module默认的export default
 
-## 使用 vue-router 
+# 使用 vue-router 
 ### 1、安装
 ```
 pnpm i vue-router
@@ -245,7 +245,7 @@ function toAccount() {
 
 ```
 
-## 使用状态管理器 pinia
+# 使用状态管理器 pinia
 
 ### 安装 
 ```
@@ -292,7 +292,7 @@ pnpm install sass -D
 
 ```
 
-## 使用 autoprefiexer 给 web 项目自动增加 css 前缀，兼容各种浏览器
+# 使用 autoprefiexer 给 web 项目自动增加 css 前缀，兼容各种浏览器
 安装
 ```
 pnpm install autoprefixer -D
@@ -331,7 +331,7 @@ export default defineConfig({
 }
 ```
 
-## 使用 @vitejs/plugin-legacy 兼容旧版浏览器js
+# 使用 @vitejs/plugin-legacy 兼容旧版浏览器js
 
 安装
 ```
@@ -349,7 +349,7 @@ plugins: [
 ],
 ```
 
-## 使用组件库 ant-design-vue
+# 使用组件库 ant-design-vue
 
 安装
 ```
@@ -382,7 +382,7 @@ pnpm i ant-design-vue@next
 
 在软件开发中，版本号通常由三个部分组成：主版本号、次版本号和修订版本号。有时，还会包括预发布版本号或构建元数据。在你提到的版本号 "4.0.0-rc.6" 中，"rc.6" 表示预发布版本，其中 "rc" 代表 "Release Candidate"，意味着这是一个发布候选版本。数字 "6" 表示该候选版本的第六个构建或修订。
 
-## 使用 tailwindcss 快速添加样式
+# 使用 tailwindcss 快速添加样式
 
 安装
 ```
@@ -409,7 +409,7 @@ module.exports = {
 @tailwind utilities;
 ```
 
-## 使用husky和lint-staged进行代码提交前的检查
+# 使用husky和lint-staged进行代码提交前的检查
 安装
 ```
 pnpm dlx husky-init && pnpm install
@@ -436,7 +436,7 @@ git add .
 git commot -m 'husky'
 ```
 
-## 基于axios封装请求
+# 基于axios封装请求
 
 ### 安装
 ```
@@ -659,7 +659,7 @@ $api.test().then(res => {
 })
 ```
 
-## 使用vite-plugin-svg-icons插件展示svg矢量图
+# 使用vite-plugin-svg-icons插件展示svg矢量图
 
 
 ### 安装 

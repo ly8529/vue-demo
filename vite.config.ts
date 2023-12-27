@@ -8,16 +8,28 @@ import legacy from '@vitejs/plugin-legacy'
 //svg插件
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 
+// import vueJsx from '@vitejs/plugin-vue-jsx'
+
 // https://vitejs.dev/config/
 export default defineConfig({
+	plugins: [
+		vue(),
+		// vueJsx(),
+		createSvgIconsPlugin({
+			// Specify the icon folder to be cached
+			iconDirs: [resolve(__dirname, 'src/assets/icons')],
+		}),
+		legacy({
+			targets: ['cover 99.5%'],
+		}),
+	],
 	resolve: {
-		alias: [
-			{
-				find: '@',
-				replacement: resolve(__dirname, 'src'),
-			},
-		],
+		alias: {
+			vue: 'vue/dist/vue.esm-bundler.js',
+			'@': resolve(__dirname, 'src'), // 这里是为 src 目录配置的别名
+		},
 	},
+
 	css: {
 		postcss: {
 			plugins: [
@@ -27,16 +39,7 @@ export default defineConfig({
 			],
 		},
 	},
-	plugins: [
-		vue(),
-		createSvgIconsPlugin({
-			// Specify the icon folder to be cached
-			iconDirs: [resolve(__dirname, 'src/assets/icons')],
-		}),
-		legacy({
-			targets: ['cover 99.5%'],
-		}),
-	],
+
 	// 引入第三方的配置,强制预构建插件包
 	// optimizeDeps: {
 	// 	include: [''],

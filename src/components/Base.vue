@@ -34,8 +34,19 @@
 	<form @submit.prevent="doSomething">
 		<input type="submit" value="button" />
 	</form>
+	<br />
+	<br />
+	<br />
+	<Count></Count>
+	<br />
+	<br />
+	<br />
+	<Tabs></Tabs>
 </template>
 <script lang="ts" setup>
+import Count from '@/components/Count.vue'
+import Tabs from '@/components/Tabs.vue'
+
 const msg = 'text'
 const rawHtml = `<span style="color:red">This should be red.</span>`
 const dynamicId = '123'

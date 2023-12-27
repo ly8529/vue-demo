@@ -391,27 +391,299 @@ function greet(event) {
 
 
 ## 表单输入绑定
+文本
+```
+<p>Message is: {{ message }}</p>
+<input v-model="message" placeholder="edit me" />
+```
+多行文本
+```
+<span>Multiline message is:</span>
+<p style="white-space: pre-line;">{{ message }}</p>
+<textarea v-model="message" placeholder="add multiple lines"></textarea>
+```
 
+复选框 
+```
+<input type="checkbox" id="checkbox" v-model="checked" true-value="yes" false-value="no" />
+<label for="checkbox">{{ checked }}</label>
+```
+
+多个复选框
+```
+const checkedNames = ref([])
+```
+```
+<div>Checked names: {{ checkedNames }}</div>
+
+<input type="checkbox" id="jack" value="Jack" v-model="checkedNames">
+<label for="jack">Jack</label>
+
+<input type="checkbox" id="john" value="John" v-model="checkedNames">
+<label for="john">John</label>
+
+<input type="checkbox" id="mike" value="Mike" v-model="checkedNames">
+<label for="mike">Mike</label>
+```
+单选按钮
+```
+<div>Picked: {{ picked }}</div>
+
+<input type="radio" id="one" value="One" v-model="picked" />
+<label for="one">One</label>
+
+<input type="radio" id="two" value="Two" v-model="picked" />
+<label for="two">Two</label>
+```
+
+选择器
+```
+<div>Selected: {{ selected }}</div>
+
+//multiple 多选
+<select v-model="selected" multiple>
+  <option disabled value="">Please select one</option>
+  <option>A</option>
+  <option>B</option>
+  <option>C</option>
+</select>
+```
+
+修饰符
+-   `.lazy`
+    ```
+    <!-- 在 "change" 事件后同步更新而不是 "input" -->
+    <input v-model.lazy="msg" />
+    ```
+-   `.number`
+    ```
+    // 用户输入自动转换为数字,如果该值无法被 parseFloat() 处理，那么将返回原始值。
+    <input v-model.number="age" />
+    ```
+-   `.trim`
+    ```
+    //默认自动去除用户输入内容中两端的空格
+    <input v-model.trim="msg" />
+    ```
 ## 生命周期
-
+-   `setup`
+-   `beforeCreate`
+-   `created`
+-   `beforeMount`
+-   `mounted`
+-   `beforeUpdate`
+-   `updated`
+-   `beforeUnmount`
+-   `unmounted`
 ## 侦听器
+侦听数据源类型
 
+- 单个 ref
+- getter 函数
+- 多个来源组成的数组
+```
+const x = ref(0)
+const y = ref(0)
+
+// 单个 ref
+watch(x, (newX) => {
+  console.log(`x is ${newX}`)
+})
+
+// getter 函数
+watch(
+  () => x.value + y.value,
+  (sum) => {
+    console.log(`sum of x + y is: ${sum}`)
+  }
+)
+
+// 多个来源组成的数组
+watch([x, () => y.value], ([newX, newY]) => {
+  console.log(`x is ${newX} and y is ${newY}`)
+})
+```
+
+reactive的属性值不能直接被侦听，需要用一个返回该属性的 getter 函数
+```
+const obj = reactive({ count: 0 })
+
+// 错误，因为 watch() 得到的参数是一个 number
+watch(obj.count, (count) => {
+  console.log(`count is: ${count}`)
+})
+
+// 正确，提供一个 getter 函数
+watch(
+  () => obj.count,
+  (count) => {
+    console.log(`count is: ${count}`)
+  }
+)
+```
+深层监听器
+
+响应式对象，会隐式地创建一个深层侦听器——该回调函数在所有嵌套的变更时都会被触发：
+
+```
+const obj = reactive({ count: 0 })
+
+watch(obj, (newValue, oldValue) => {
+  // 在嵌套的属性变更时触发
+  // 注意：`newValue` 此处和 `oldValue` 是相等的
+  // 因为它们是同一个对象！
+})
+
+obj.count++
+
+
+watch(
+  () => state.someObject,
+  () => {
+    // 仅当 state.someObject 被替换时触发
+  },
+  { deep: true }, //加上后强制转成深层侦听器 谨慎使用，开销很大
+  { immediate: true } // 立即执行，且当 `state.someObject` 改变时再次执行
+)
+```
+
+watchEffect() 自动跟踪回调的响应式依赖
+
+回调会立即执行，不需要指定 immediate: true。在执行期间，它会自动追踪 todoId.value 作为依赖（和计算属性类似）。每当 todoId.value 变化时，回调会再次执行
+```
+watchEffect(async () => {
+  const response = await fetch(
+    `https://jsonplaceholder.typicode.com/todos/${todoId.value}`
+  )
+  data.value = await response.json()
+})
+```
+   `watchEffect 仅会在其同步执行期间，才追踪依赖。在使用异步回调时，只有在第一个 await 正常工作前访问到的属性才会被追踪。`
+
+侦听器回调中能访问被 Vue 更新之后的 DOM
+```
+const num = ref(1)
+const numRef = ref<HTMLElement | null>(null)
+
+watch(
+	num,
+	news => {
+		console.log(news)
+        // 不加 {flush: 'post'} textContent=1 data更新-执行watch-执行render update 获取到旧数据
+		// 加 {flush: 'post'} textContent=2 data更新-执行render update-执行watch
+        console.log(numRef.value?.textContent, 'textContent')
+        
+	},
+	{ flush: 'post' }, //dom更新 和数据news 更新同步了
+)
+
+const onToggle = () => {
+	num.value = 2
+}
+```
+后置刷新的别名 watchPostEffect()
+
+停止侦听器
+```
+const unwatch = watchEffect(() => {})
+
+// ...当该侦听器不再需要时
+unwatch()
+```
+同步创建的侦听器 会在组件卸载时自动停止，异步创建的侦听器需要使用unwatch来停止防止内存泄漏，`不建议使用异步侦听器`
+
+如果需要等待一些异步数据，你可以使用条件式的侦听逻辑：
+```
+// 需要异步请求得到的数据
+const data = ref(null)
+
+watchEffect(() => {
+  if (data.value) {
+    // 数据加载后执行某些操作...
+  }
+})
+```
 ## 模板引用
+访问模版引用
+```
+<script setup>
+import { ref, onMounted } from 'vue'
+
+// 声明一个 ref 来存放该元素的引用
+// 必须和模板里的 ref 同名
+const input = ref(null)
+
+onMounted(() => {
+  input.value.focus()
+})
+</script>
+
+<template>
+  <input ref="input" />
+</template>
+```
+只能在组件挂载后访问
+```
+watchEffect(() => {
+  if (input.value) {
+    input.value.focus()
+  } else {
+    // 此时还未挂载，或此元素已经被卸载（例如通过 v-if 控制）
+  }
+})
+```
+v-for 中的模板引用
+
+```
+<script setup>
+import { ref, onMounted } from 'vue'
+
+const itemRefs = ref([])
+
+onMounted(() => console.log(itemRefs.value))
+</script>
+
+<template>
+  <ul>
+    <li v-for="item in 10" :key="item" ref="itemRefs">
+      {{ item }}
+    </li>
+  </ul>
+</template>
+
+```
+`itemRefs.value：` ref 数组**并不**保证与源数组相同的顺序
+
+![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/79fc44b6e6f2456981a542ce08a382c5~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=1306&h=628&s=62800&e=png&b=ffffff)
+
+函数模板引用
+```
+<input :ref="(el) => { /* 将 el 赋值给一个数据属性或 ref 变量 */ }">
+```
+
+组件上的 ref
+```
+<script setup>
+import { ref, onMounted } from 'vue'
+import Child from './Child.vue'
+
+const child = ref(null)
+
+onMounted(() => {
+  // child.value 是 <Child /> 组件的实例
+})
+</script>
+
+<template>
+  <Child ref="child" />
+</template>
+```
+
+注意⚠️：使用了 <script setup> 的组件是默认私有的：一个父组件无法访问到一个使用了 <script setup> 的子组件中的任何东西，除非子组件在其中通过 defineExpose 宏显式暴露：
 
 ## 组件基础
 
+![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/549f19ec0d1542e1a25e047fcfb7c590~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=1498&h=530&s=19576&e=png&b=ffffff)
 
-# 深入组件
-
-# 逻辑复用
-
-# 内置组件
-
-# 应用规模化
-
-# 最佳实践
-
-# typeScript
-
-# 进阶主题
+单文件组件(SFC)
 
